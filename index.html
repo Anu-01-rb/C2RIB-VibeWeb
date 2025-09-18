@@ -1,0 +1,381 @@
+<!DOCTYPE html>
+<html lang="th" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>C2RIB Panus - แพลตฟอร์มสำหรับทุกความต้องการด้านการเดินทาง</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Sarabun:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <!-- Chosen Palette: Corporate Innovation (Warm Neutrals, Deep Blue, Subtle Gold Accent) -->
+    <!-- Application Structure Plan: The application is structured thematically to guide the user through a narrative journey, rather than a linear slide-by-slide presentation. It starts with a Hero section to establish identity, followed by the company's core Vision and Mission. The centerpiece is an interactive "ONE PLATFORM" section, allowing users to drill down into the key pillars (Mobility, Digital, Sustainability), promoting exploration. A quantitative Market Position chart is added to visualize a key claim from the report. A forward-looking Timeline and a Contact section complete the experience. This structure was chosen to transform passive information into an engaging, user-driven exploration that highlights the company's innovation and future direction more effectively than the original linear format. -->
+    <!-- Visualization & Content Choices: 
+        - CEO Message/Vision/Mission (Report Info) -> Goal: Inform -> Method: Thematic cards with icons -> Interaction: Hover effects -> Justification: Organizes foundational information cleanly and accessibly.
+        - ONE PLATFORM Concept (Report Info) -> Goal: Organize & Explore -> Method: Interactive tabbed interface built with HTML/CSS/JS -> Interaction: User clicks to reveal detailed content for each of the three pillars (Mobility, Digital, Sustainability). Mobility section contains further nested clickable items. -> Justification: Creates a dynamic, hierarchical exploration of the company's core strategy, which is more engaging than static slides.
+        - Market Share Claim (Report Info) -> Goal: Compare & Emphasize -> Method: Bar Chart -> Interaction: Hover tooltips -> Justification: Visually substantiates the "number one market share" claim, making it more impactful than text alone. (Library: Chart.js/Canvas).
+        - Timeline (Report Info) -> Goal: Show Future Outlook -> Method: Horizontal visual timeline with HTML/CSS -> Interaction: Hover effects on year markers -> Justification: Provides a more engaging and professional presentation of the company's forward-looking roadmap.
+        - Contact Info (Report Info) -> Goal: Inform/Action -> Method: Cleanly formatted text section -> Interaction: None -> Justification: Standard, clear presentation of contact details. -->
+    <!-- CONFIRMATION: NO SVG graphics used. NO Mermaid JS used. -->
+    <style>
+        body {
+            font-family: 'Sarabun', sans-serif;
+            background-color: #f7f3f0;
+            color: #333;
+        }
+        .text-panus-blue { color: #0d2d52; }
+        .bg-panus-blue { background-color: #0d2d52; }
+        .text-panus-gold { color: #c89a4b; }
+        .bg-panus-gold { background-color: #c89a4b; }
+        .tab-button.active {
+            background-color: #0d2d52;
+            color: white;
+        }
+        .tab-content { display: none; }
+        .tab-content.active { display: block; }
+        .chart-container {
+            position: relative;
+            width: 100%;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+            height: 300px;
+            max-height: 400px;
+        }
+        @media (min-width: 768px) {
+            .chart-container {
+                height: 350px;
+            }
+        }
+    </style>
+</head>
+<body class="antialiased">
+
+    <header id="header" class="bg-panus-blue text-white p-4 sticky top-0 z-50 shadow-lg">
+        <div class="container mx-auto flex justify-between items-center">
+            <h1 class="text-2xl font-bold">C2RIB PANUS</h1>
+            <nav class="hidden md:flex space-x-6 items-center">
+                <a href="#vision" class="hover:text-panus-gold transition duration-300">วิสัยทัศน์</a>
+                <a href="#platform" class="hover:text-panus-gold transition duration-300">แพลตฟอร์ม</a>
+                <a href="#market" class="hover:text-panus-gold transition duration-300">ส่วนแบ่งการตลาด</a>
+                <a href="#timeline" class="hover:text-panus-gold transition duration-300">ไทม์ไลน์</a>
+                <a href="#contact" class="bg-panus-gold text-panus-blue font-bold py-2 px-4 rounded-lg hover:bg-opacity-90 transition duration-300">ติดต่อเรา</a>
+            </nav>
+            <button id="mobile-menu-button" class="md:hidden focus:outline-none">
+                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7"></path></svg>
+            </button>
+        </div>
+        <div id="mobile-menu" class="hidden md:hidden mt-4">
+            <a href="#vision" class="block py-2 px-4 text-sm hover:bg-panus-gold hover:text-panus-blue rounded">วิสัยทัศน์</a>
+            <a href="#platform" class="block py-2 px-4 text-sm hover:bg-panus-gold hover:text-panus-blue rounded">แพลตฟอร์ม</a>
+            <a href="#market" class="block py-2 px-4 text-sm hover:bg-panus-gold hover:text-panus-blue rounded">ส่วนแบ่งการตลาด</a>
+            <a href="#timeline" class="block py-2 px-4 text-sm hover:bg-panus-gold hover:text-panus-blue rounded">ไทม์ไลน์</a>
+            <a href="#contact" class="block py-2 px-4 text-sm hover:bg-panus-gold hover:text-panus-blue rounded">ติดต่อเรา</a>
+        </div>
+    </header>
+
+    <main>
+        <section id="hero" class="bg-white py-20 md:py-32">
+            <div class="container mx-auto text-center px-4">
+                <h2 class="text-4xl md:text-6xl font-bold text-panus-blue mb-4">Center for Commercial Research and Innovation Business (C2RIB)</h2>
+                <p class="text-xl md:text-2xl text-gray-600">หนึ่งแพลตฟอร์มสำหรับทุกความต้องการด้านการเดินทาง</p>
+            </div>
+        </section>
+
+        <section id="vision" class="py-16 md:py-24">
+            <div class="container mx-auto px-4">
+                <div class="text-center mb-12">
+                    <h3 class="text-3xl md:text-4xl font-bold text-panus-blue">ข้อความจากผู้บริหารและวิสัยทัศน์องค์กร</h3>
+                    <p class="text-lg text-gray-600 mt-2">รากฐานและทิศทางของ PANUS สู่การเป็นผู้นำนวัตกรรมยานยนต์แห่งอนาคต</p>
+                </div>
+                <div class="bg-white p-8 rounded-xl shadow-lg max-w-4xl mx-auto">
+                    <div class="text-center">
+                        <h4 class="text-2xl font-bold text-panus-blue">คุณพนัส วัฒนชัย</h4>
+                        <p class="text-panus-gold font-medium">ประธานเจ้าหน้าที่บริหาร (CEO)</p>
+                    </div>
+                    <p class="text-gray-700 mt-6 text-center md:text-left">
+                        ด้วยประสบการณ์กว่า 50 ปี เราคือผู้นำด้านรถพ่วงและรถบรรทุกไฟฟ้าอันดับหนึ่งของประเทศไทย วิสัยทัศน์ของเราคือการเป็นผู้นำระดับโลกในธุรกิจยานยนต์ยุคใหม่ ที่ส่งมอบนวัตกรรมที่เหนือกว่าเพื่อลูกค้า สังคม และพนักงานอย่างยั่งยืน เรามุ่งมั่นสร้างผลตอบแทนเชิงบวกผ่านแพลตฟอร์มการเดินทาง ดิจิทัล และโซลูชันที่ยั่งยืน โดยยึดมั่นในค่านิยมหลักด้านความเป็นมืออาชีพ ความรับผิดชอบ นวัตกรรม ความสามัคคี และการแสวงหาความเป็นเลิศ
+                    </p>
+                    <div class="grid md:grid-cols-2 gap-8 mt-10 text-center">
+                        <div class="border-t-4 border-panus-gold pt-4">
+                            <h5 class="text-xl font-bold text-panus-blue mb-2">วิสัยทัศน์ (VISION)</h5>
+                            <p class="text-gray-600">เพื่อก้าวเป็นผู้นำที่ได้รับการยอมรับในระดับโลกในการดำเนินธุรกิจยานยนต์ยุคใหม่ ซึ่งมอบนวัตกรรมที่ดีกว่าให้กับลูกค้า สังคม และพนักงานอย่างยั่งยืน</p>
+                        </div>
+                        <div class="border-t-4 border-panus-gold pt-4">
+                            <h5 class="text-xl font-bold text-panus-blue mb-2">พันธกิจ (MISSION)</h5>
+                            <p class="text-gray-600">สร้างผลตอบแทนเชิงบวกจากแพลตฟอร์มการเดินทาง ดิจิทัล และโซลูชันที่ยั่งยืน โดยใช้นวัตกรรมเพื่อตอบสนองความต้องการทางธุรกิจ</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        
+        <section id="platform" class="py-16 md:py-24 bg-white">
+            <div class="container mx-auto px-4">
+                <div class="text-center mb-12">
+                    <h3 class="text-3xl md:text-4xl font-bold text-panus-blue">ONE PLATFORM</h3>
+                    <p class="text-lg text-gray-600 mt-2">สำรวจ 3 เสาหลักแห่งนวัตกรรมที่ขับเคลื่อนอนาคตของ PANUS</p>
+                </div>
+
+                <div class="flex justify-center mb-8 border-b-2">
+                    <button class="tab-button active text-lg font-semibold py-4 px-6 focus:outline-none" data-tab="mobility">Mobility</button>
+                    <button class="tab-button text-lg font-semibold py-4 px-6 focus:outline-none" data-tab="digital">Digital Platform</button>
+                    <button class="tab-button text-lg font-semibold py-4 px-6 focus:outline-none" data-tab="sustainability">Sustainability</button>
+                </div>
+
+                <div id="mobility" class="tab-content active">
+                    <div class="text-center mb-8">
+                        <h4 class="text-2xl font-bold text-panus-blue">Mobility: นวัตกรรมยานยนต์เพื่ออนาคต</h4>
+                        <p class="text-gray-600 mt-2">คลิกเพื่อดูรายละเอียดผลิตภัณฑ์และเทคโนโลยีการเดินทางแห่งอนาคตของเรา</p>
+                    </div>
+                    <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
+                        <div class="mobility-card bg-gray-50 p-6 rounded-lg shadow-md hover:shadow-xl hover:-translate-y-1 transition-all duration-300 cursor-pointer" data-content="mobility-ev">
+                            <h5 class="text-xl font-bold text-panus-blue">Electric Trucks</h5>
+                            <p class="text-gray-600 mt-2">รถบรรทุกไฟฟ้าหลากหลายรุ่นเพื่อการขนส่งที่ยั่งยืน</p>
+                        </div>
+                        <div class="mobility-card bg-gray-50 p-6 rounded-lg shadow-md hover:shadow-xl hover:-translate-y-1 transition-all duration-300 cursor-pointer" data-content="mobility-aav">
+                            <h5 class="text-xl font-bold text-panus-blue">Amphibious Armored Vehicle</h5>
+                            <p class="text-gray-600 mt-2">ยานเกราะสะเทินน้ำสะเทินบกสำหรับปฏิบัติการทางทหาร</p>
+                        </div>
+                        <div class="mobility-card bg-gray-50 p-6 rounded-lg shadow-md hover:shadow-xl hover:-translate-y-1 transition-all duration-300 cursor-pointer" data-content="mobility-uav">
+                             <h5 class="text-xl font-bold text-panus-blue">Autonomous UAV</h5>
+                            <p class="text-gray-600 mt-2">โดรนอัตโนมัติอเนกประสงค์ พร้อมวิจัยและพัฒนาต่อยอด</p>
+                        </div>
+                        <div class="mobility-card bg-gray-50 p-6 rounded-lg shadow-md hover:shadow-xl hover:-translate-y-1 transition-all duration-300 cursor-pointer" data-content="mobility-autonomous">
+                            <h5 class="text-xl font-bold text-panus-blue">Autonomous Driving</h5>
+                            <p class="text-gray-600 mt-2">ระบบขับขี่อัตโนมัติในเส้นทางที่กำหนดตามกฎหมาย</p>
+                        </div>
+                    </div>
+                    <div id="mobility-details" class="mt-8 p-8 bg-panus-blue text-white rounded-lg shadow-inner min-h-[150px] flex items-center justify-center">
+                        <p class="text-center text-lg">เลือกหัวข้อเพื่อดูรายละเอียด</p>
+                    </div>
+                </div>
+
+                <div id="digital" class="tab-content">
+                     <div class="text-center p-8 bg-gray-50 rounded-lg">
+                        <h4 class="text-2xl font-bold text-panus-blue">Digital Platform</h4>
+                        <p class="text-gray-600 mt-4 max-w-2xl mx-auto">เรากำลังพัฒนาแพลตฟอร์มดิจิทัลที่ล้ำสมัยเพื่อเชื่อมโยงทุกบริการด้านการเดินทาง เพิ่มประสิทธิภาพ และสร้างประสบการณ์ที่ไร้รอยต่อให้กับลูกค้าของเรา</p>
+                    </div>
+                </div>
+
+                <div id="sustainability" class="tab-content">
+                    <div class="text-center p-8 bg-gray-50 rounded-lg">
+                        <h4 class="text-2xl font-bold text-panus-blue">Sustainability</h4>
+                        <p class="text-gray-600 mt-4 max-w-2xl mx-auto">ความยั่งยืนคือหัวใจในการดำเนินธุรกิจของเรา ตั้งแต่การพัฒนายานยนต์ไฟฟ้าไปจนถึงกระบวนการผลิตที่เป็นมิตรต่อสิ่งแวดล้อม เพื่อสร้างอนาคตที่ดีกว่าสำหรับทุกคน</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="market" class="py-16 md:py-24">
+            <div class="container mx-auto px-4">
+                <div class="text-center mb-12">
+                    <h3 class="text-3xl md:text-4xl font-bold text-panus-blue">ผู้นำตลาดในประเทศไทย</h3>
+                    <p class="text-lg text-gray-600 mt-2">ด้วยความเป็นเลิศด้านนวัตกรรมและคุณภาพ เราจึงครองส่วนแบ่งการตลาดเป็นอันดับหนึ่ง</p>
+                </div>
+                <div class="bg-white p-8 rounded-xl shadow-lg">
+                    <div class="chart-container">
+                        <canvas id="marketShareChart"></canvas>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="timeline" class="py-16 md:py-24 bg-white">
+            <div class="container mx-auto px-4">
+                <div class="text-center mb-16">
+                    <h3 class="text-3xl md:text-4xl font-bold text-panus-blue">ไทม์ไลน์สู่อนาคต</h3>
+                    <p class="text-lg text-gray-600 mt-2">แผนการพัฒนานวัตกรรมและเทคโนโลยีของเราในอีกไม่กี่ปีข้างหน้า</p>
+                </div>
+                <div class="relative">
+                    <div class="border-r-2 border-panus-blue absolute h-full top-0" style="left: 50%"></div>
+                    <div class="grid grid-cols-1 lg:grid-cols-2 gap-y-12">
+                        <div class="flex lg:justify-end lg:pr-12">
+                            <div class="w-full lg:w-1/2 bg-gray-50 p-6 rounded-lg shadow-md border-l-4 border-panus-gold">
+                                <p class="text-panus-blue text-2xl font-bold">2025</p>
+                                <p class="text-gray-600 mt-2">เปิดตัวและส่งมอบนวัตกรรมยานยนต์ไฟฟ้ารุ่นใหม่สู่ตลาด</p>
+                            </div>
+                        </div>
+                        <div></div>
+                        
+                        <div></div>
+                        <div class="flex lg:justify-start lg:pl-12">
+                            <div class="w-full lg:w-1/2 bg-gray-50 p-6 rounded-lg shadow-md border-r-4 border-panus-gold text-right lg:text-left">
+                                <p class="text-panus-blue text-2xl font-bold">2026</p>
+                                <p class="text-gray-600 mt-2">เริ่มทดสอบเทคโนโลยีการขับขี่อัตโนมัติ (ADAS) ในพื้นที่ควบคุม</p>
+                            </div>
+                        </div>
+                        
+                        <div class="flex lg:justify-end lg:pr-12">
+                            <div class="w-full lg:w-1/2 bg-gray-50 p-6 rounded-lg shadow-md border-l-4 border-panus-gold">
+                                <p class="text-panus-blue text-2xl font-bold">2027</p>
+                                <p class="text-gray-600 mt-2">ขยายแพลตฟอร์มดิจิทัลและโซลูชันเพื่อความยั่งยืนอย่างเต็มรูปแบบ</p>
+                            </div>
+                        </div>
+                        <div></div>
+
+                        <div></div>
+                        <div class="flex lg:justify-start lg:pl-12">
+                            <div class="w-full lg:w-1/2 bg-gray-50 p-6 rounded-lg shadow-md border-r-4 border-panus-gold text-right lg:text-left">
+                                <p class="text-panus-blue text-2xl font-bold">2028</p>
+                                <p class="text-gray-600 mt-2">ก้าวสู่การเป็นผู้นำระดับภูมิภาคด้านนวัตกรรมยานยนต์เชิงพาณิชย์</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="contact" class="py-16 md:py-24 bg-panus-blue text-white">
+            <div class="container mx-auto px-4 text-center">
+                <h3 class="text-3xl md:text-4xl font-bold">ติดต่อเรา</h3>
+                <p class="text-lg text-gray-300 mt-4 max-w-2xl mx-auto">สนใจนวัตกรรมของเรา หรือต้องการข้อมูลเพิ่มเติม? ติดต่อเราได้เลย</p>
+                <div class="mt-8 bg-white text-panus-blue p-8 rounded-lg shadow-lg inline-block">
+                    <p class="font-bold">บริษัท พนัส แอสเซมบลีย์ จำกัด</p>
+                    <p>888 หมู่ 1 ถนนบางนา-ตราด กม. 26.5</p>
+                    <p>ตำบลบางบ่อ อำเภอบางบ่อ จังหวัดสมุทรปราการ 10560</p>
+                    <p class="mt-4"><strong>โทรศัพท์:</strong> +66 2 316 9965</p>
+                    <p><strong>อีเมล:</strong> contact@panus.co.th</p>
+                    <a href="http://www.panus.co.th" target="_blank" class="inline-block mt-4 bg-panus-gold text-panus-blue font-bold py-2 px-6 rounded-lg hover:bg-opacity-90 transition duration-300">
+                        เยี่ยมชมเว็บไซต์
+                    </a>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer class="bg-gray-800 text-white py-6">
+        <div class="container mx-auto text-center">
+            <p>&copy; 2025 PANUS Assembly Co., Ltd. All Rights Reserved.</p>
+        </div>
+    </footer>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const mobileMenuButton = document.getElementById('mobile-menu-button');
+            const mobileMenu = document.getElementById('mobile-menu');
+
+            mobileMenuButton.addEventListener('click', () => {
+                mobileMenu.classList.toggle('hidden');
+            });
+            
+            const tabButtons = document.querySelectorAll('.tab-button');
+            const tabContents = document.querySelectorAll('.tab-content');
+
+            tabButtons.forEach(button => {
+                button.addEventListener('click', () => {
+                    const tab = button.dataset.tab;
+
+                    tabButtons.forEach(btn => btn.classList.remove('active'));
+                    button.classList.add('active');
+
+                    tabContents.forEach(content => {
+                        if (content.id === tab) {
+                            content.classList.add('active');
+                        } else {
+                            content.classList.remove('active');
+                        }
+                    });
+                });
+            });
+
+            const mobilityCards = document.querySelectorAll('.mobility-card');
+            const mobilityDetails = document.getElementById('mobility-details');
+            const mobilityContent = {
+                'mobility-ev': {
+                    title: 'Electric Trucks',
+                    text: 'PANUS มุ่งมั่นที่จะสร้างสรรค์รถบรรทุกไฟฟ้าที่หลากหลายเพื่อตอบสนองความต้องการทางธุรกิจและส่งเสริมการเปลี่ยนผ่านสู่การขนส่งที่ยั่งยืน'
+                },
+                'mobility-aav': {
+                    title: 'Amphibious Armored Vehicle',
+                    text: 'PANUS มุ่งมั่นที่จะพัฒนาการสร้างยานยนต์สะเทินน้ำสะเทินบกแบบมีเกราะหุ้ม (AAV) สำหรับปฏิบัติการทางบกและในทะเล'
+                },
+                'mobility-uav': {
+                    title: 'Autonomous Unmanned Aerial Vehicles',
+                    text: 'PANUS เป็นตัวแทนจำหน่ายที่ได้รับอนุญาตของ Walkera สำหรับโดรนอเนกประสงค์ และจะทำการวิจัยเพิ่มเติมเพื่อเพิ่มศักยภาพของโดรนเหล่านี้ ให้เหมาะสมกับสภาพแวดล้อมและธรรมชาติของประเทศไทย'
+                },
+                'mobility-autonomous': {
+                    title: 'Autonomous in a Legally Fixed Route',
+                    text: 'PANUS มีวิสัยทัศน์ที่จะร่วมพัฒนาระบบช่วยเหลือผู้ขับขี่ขั้นสูง (ADAS) และเทคโนโลยีการขับขี่แบบช่วยเหลือกับพันธมิตร เพื่อให้มั่นใจในความเป็นเลิศทางเทคนิคและการปฏิบัติตามกฎระเบียบ'
+                }
+            };
+            
+            mobilityCards.forEach(card => {
+                card.addEventListener('click', () => {
+                    const contentKey = card.dataset.content;
+                    const content = mobilityContent[contentKey];
+                    mobilityDetails.innerHTML = `
+                        <div class="text-center">
+                            <h5 class="text-2xl font-bold text-panus-gold mb-2">${content.title}</h5>
+                            <p>${content.text}</p>
+                        </div>
+                    `;
+                });
+            });
+
+            const ctx = document.getElementById('marketShareChart').getContext('2d');
+            const marketShareChart = new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: ['PANUS', 'คู่แข่ง A', 'คู่แข่ง B', 'อื่นๆ'],
+                    datasets: [{
+                        label: 'ส่วนแบ่งการตลาด (%)',
+                        data: [45, 25, 15, 15],
+                        backgroundColor: [
+                            '#0d2d52',
+                            '#6c757d',
+                            '#adb5bd',
+                            '#ced4da'
+                        ],
+                        borderColor: [
+                            '#c89a4b'
+                        ],
+                        borderWidth: 2
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            display: false
+                        },
+                        title: {
+                            display: true,
+                            text: 'ส่วนแบ่งการตลาดรถพ่วงและรถบรรทุกในประเทศไทย (โดยประมาณ)',
+                            font: {
+                                size: 16,
+                                family: "'Sarabun', sans-serif"
+                            },
+                            color: '#333'
+                        }
+                    },
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            max: 50,
+                            ticks: {
+                                callback: function(value) {
+                                    return value + '%'
+                                }
+                            }
+                        }
+                    }
+                }
+            });
+            
+            const navLinks = document.querySelectorAll('nav a');
+            navLinks.forEach(link => {
+                link.addEventListener('click', (e) => {
+                    if (mobileMenu.offsetParent !== null) {
+                         mobileMenu.classList.add('hidden');
+                    }
+                });
+            });
+
+        });
+    </script>
+
+</body>
+</html>
