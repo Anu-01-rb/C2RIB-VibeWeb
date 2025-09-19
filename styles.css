@@ -1,0 +1,50 @@
+body {
+    font-family: 'Sarabun', sans-serif;
+    background-color: #f7f3f0;
+    color: #333;
+}
+
+.text-panus-blue {
+    color: #0d2d52;
+}
+
+.bg-panus-blue {
+    background-color: #0d2d52;
+}
+
+.text-panus-gold {
+    color: #c89a4b;
+}
+
+.bg-panus-gold {
+    background-color: #c89a4b;
+}
+
+.tab-button.active {
+    background-color: #0d2d52;
+    color: white;
+}
+
+.tab-content {
+    display: none;
+}
+
+.tab-content.active {
+    display: block;
+}
+
+.chart-container {
+    position: relative;
+    width: 100%;
+    max-width: 600px;
+    margin-left: auto;
+    margin-right: auto;
+    height: 300px;
+    max-height: 400px;
+}
+
+@media (min-width: 768px) {
+    .chart-container {
+        height: 350px;
+    }
+}
